@@ -19,10 +19,12 @@ import {
 import registerImg from "../assets/Sign up-bro.svg";
 import { NavLink } from "react-router-dom";
 import { GrSchedulePlay } from "react-icons/gr";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { MdError } from "react-icons/md";
 import { IoCheckmarkCircle } from "react-icons/io5";
+import axios from "axios";
+import Notify from "@/helpers/Notify";
 
 type counselor = {
   id: number;
@@ -52,6 +54,33 @@ function Register() {
 
   const handleHidePassword = () => {
     setHide(hide === "password" ? "text" : "password");
+  };
+
+  const handleRegister = (e: FormEvent) => {
+    e.preventDefault();
+    const data = {
+      fname,
+      lname,
+      email,
+      user,
+      counselortype,
+      phone,
+      password,
+    };
+
+    console.log(data);
+
+    axios
+      .post("/api/auth/register", data)
+      .then((res) => {
+        if (res.status == 201) {
+          Notify("success", res.data.resMsg);
+          window.location.href = "/login";
+        }
+      })
+      .catch((error) => {
+        Notify("error", error.response.data.resMsg);
+      });
   };
 
   return (
@@ -178,7 +207,12 @@ function Register() {
             </form>
           </CardContent>
           <CardFooter className="w-full flex flex-col items-start">
-            <Button className="w-full bg-brightred">Register</Button>
+            <Button
+              className="w-full bg-brightred"
+              onClick={(e) => handleRegister(e)}
+            >
+              Register
+            </Button>
             <div className="flex gap-1 mt-2">
               <p className="text-sm text-start text-gray-500">
                 Do you already have an account?
