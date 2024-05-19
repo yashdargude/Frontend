@@ -17,7 +17,7 @@ function Header() {
     <header className="bg-darkblue fixed w-full left-0 top-0">
       <nav className="container mx-md-auto flex items-center justify-between px-4 py-8">
         <NavLink to="/" className="flex items-center justify-center gap-2">
-          <HiCubeTransparent className="text-brightred w-6 h-6" />
+          <HiCubeTransparent className="text-brightred w-10 h-10" />
           <h1 className="text-2xl text-white font-bold tracking-widest">
             FindYourGuide
           </h1>

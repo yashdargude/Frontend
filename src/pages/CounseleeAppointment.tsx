@@ -1,7 +1,7 @@
 function CounseleeAppointment() {
   return (
-    <div>CounseleeAppointment</div>
-  )
+    <div className="">CounseleeAppointment</div>
+  );
 }
 
-export default CounseleeAppointment
+export default CounseleeAppointment;
