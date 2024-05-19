@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import registerImg from "../assets/Sign up-bro.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { GrSchedulePlay } from "react-icons/gr";
 import { FormEvent, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
@@ -25,6 +25,8 @@ import { MdError } from "react-icons/md";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import axios from "axios";
 import Notify from "@/helpers/Notify";
+import { isValidIndianPhoneNumber, isValidEmail } from "@/helpers/Validators";
+import { CgSpinner } from "react-icons/cg";
 
 type counselor = {
   id: number;
@@ -44,6 +46,7 @@ const counselorTypes: counselor[] = [
 
 function Register() {
   const [hide, setHide] = useState("password");
+  const [isLoading, setIsLoading] = useState(false);
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
@@ -51,6 +54,7 @@ function Register() {
   const [counselortype, setCounselorType] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleHidePassword = () => {
     setHide(hide === "password" ? "text" : "password");
@@ -62,7 +66,7 @@ function Register() {
       fname,
       lname,
       email,
-      user,
+      userType: user,
       counselortype,
       phone,
       password,
@@ -70,16 +74,38 @@ function Register() {
 
     console.log(data);
 
+    if (!fname || !lname || !email || !user || !phone || !password) {
+      Notify("error", "All fields are required");
+      return;
+    }
+
+    if (user === "counselor" && !counselortype) {
+      Notify("error", "Please select a counselor type");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      Notify("error", "Enter valid email address");
+      return;
+    }
+
+    if (!isValidIndianPhoneNumber(phone)) {
+      Notify("error", "Enter valid mobile number");
+      return;
+    }
+    setIsLoading(true);
     axios
       .post("/api/auth/register", data)
       .then((res) => {
         if (res.status == 201) {
           Notify("success", res.data.resMsg);
-          window.location.href = "/login";
+          setIsLoading(false);
+          setTimeout(() => navigate("/login"), 3000);
         }
       })
       .catch((error) => {
         Notify("error", error.response.data.resMsg);
+        setIsLoading(false);
       });
   };
 
@@ -97,7 +123,7 @@ function Register() {
         <Card className="border-none w-full shadow-none bg-transparent">
           <CardHeader>
             <CardTitle>Create your account</CardTitle>
-            <CardDescription>to access our dashboard</CardDescription>
+            <CardDescription>to start your journey with us</CardDescription>
           </CardHeader>
           <CardContent>
             <form>
@@ -210,7 +236,9 @@ function Register() {
             <Button
               className="w-full bg-brightred"
               onClick={(e) => handleRegister(e)}
+              disabled={isLoading}
             >
+              {isLoading && <CgSpinner className="mr-2 h-4 w-4 animate-spin" />}
               Register
             </Button>
             <div className="flex gap-1 mt-2">

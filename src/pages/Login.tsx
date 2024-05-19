@@ -9,21 +9,69 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import registerImg from "../assets/Sign up-bro.svg";
-import { NavLink } from "react-router-dom";
+import loginImg from "../assets/Computer login-bro.svg";
+import { NavLink, useNavigate } from "react-router-dom";
 import { GrSchedulePlay } from "react-icons/gr";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import Notify from "@/helpers/Notify";
+import { isValidEmail } from "@/helpers/Validators";
+import axios from "axios";
+import { CgSpinner } from "react-icons/cg";
 
 function Login() {
   const [hide, setHide] = useState("password");
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleHidePassword = () => {
     setHide(hide === "password" ? "text" : "password");
+  };
+
+  const handleLogin = (e: FormEvent) => {
+    e.preventDefault();
+    const data = {
+      email,
+      password,
+    };
+
+    console.log(data);
+
+    if (!email) {
+      Notify("error", "Email is required");
+      return;
+    }
+
+    if (!password) {
+      Notify("error", "Password is required");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      Notify("error", "Email is invalid");
+      return;
+    }
+    setIsLoading(true);
+    axios
+      .post("/api/auth/login", data)
+      .then((res) => {
+        if (res.status == 200) {
+          Notify("success", res.data?.resMsg);
+          localStorage.setItem("auth-token", res.data?.resData?.token);
+          setIsLoading(false);
+          navigate("/dashboard/profile");
+        }
+      })
+      .catch((error) => {
+        Notify("error", error.response.data.resMsg);
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -39,7 +87,7 @@ function Login() {
         </div>
         <Card className="border-none w-full shadow-none bg-transparent">
           <CardHeader>
-            <CardTitle>Create your account</CardTitle>
+            <CardTitle>Login to your account</CardTitle>
             <CardDescription>to access our dashboard</CardDescription>
           </CardHeader>
           <CardContent>
@@ -79,7 +127,14 @@ function Login() {
             </form>
           </CardContent>
           <CardFooter className="w-full flex flex-col items-start">
-            <Button className="w-full bg-brightred">Register</Button>
+            <Button
+              className="w-full bg-brightred"
+              onClick={(e) => handleLogin(e)}
+              disabled={isLoading}
+            >
+              {isLoading && <CgSpinner className="mr-2 h-4 w-4 animate-spin" />}
+              Login
+            </Button>
             <div className="flex gap-1 mt-2">
               <p className="text-sm text-start text-gray-500">
                 Do not have an account?
@@ -95,7 +150,7 @@ function Login() {
         </Card>
       </div>
       <div className="hidden lg:flex items-center justify-center w-full lg:w-1/2 bg-brightred bg-opacity-5">
-        <img src={registerImg} alt="Register hero image" className="w-[70%]" />
+        <img src={loginImg} alt="Login hero image" className="w-[70%]" />
       </div>
     </section>
   );

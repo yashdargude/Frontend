@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <App />
       <Toaster
         richColors
-        position="bottom-right"
+        position="top-right"
         visibleToasts={3}
         duration={2000}
         closeButton

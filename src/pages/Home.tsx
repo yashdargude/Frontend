@@ -1,11 +1,14 @@
 import Header from "@/components/custom/Header";
 
+
 function Home() {
+
+
   return (
     <>
       <Header />
-      <section className="mt-24 pt-4 bg-gradient-radial from-gradientred via-gradientblue to-darkblue">
-        <div className="container mx-md-auto h-screen w-full flex flex-col items-center justify-center py-12">
+      <section className="mt-24 pt-4 pb-8 bg-gradient-radial from-gradientred via-gradientblue to-darkblue">
+        <div className="container mx-md-auto w-full flex flex-col items-center justify-center py-12">
           <div>
             <h1 className="text-6xl text-amber-100 text-center px-60 tracking-tight font-bold leading-tight">
               Find the perfect guide to your well-being
