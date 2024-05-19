@@ -1,23 +1,23 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { GrSchedulePlay } from "react-icons/gr";
 import useAuthContext from "@/hooks/useAuthContext";
 import ClearLocalStorage from "@/helpers/ClearLocalStorage";
+import { HiCubeTransparent } from "react-icons/hi";
 
 function Header() {
   const navigate = useNavigate();
-  const { isAuthenticated,token } = useAuthContext();
+  const { isAuthenticated, token } = useAuthContext();
   console.log(token);
 
   const handleLogout = () => {
     ClearLocalStorage();
-    window.location.reload()
+    window.location.reload();
   };
   return (
     <header className="bg-darkblue fixed w-full left-0 top-0">
       <nav className="container mx-md-auto flex items-center justify-between px-4 py-8">
         <NavLink to="/" className="flex items-center justify-center gap-2">
-          <GrSchedulePlay className="text-brightred w-6 h-6" />
+          <HiCubeTransparent className="text-brightred w-6 h-6" />
           <h1 className="text-2xl text-white font-bold tracking-widest">
             FindYourGuide
           </h1>

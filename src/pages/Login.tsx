@@ -11,13 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import loginImg from "../assets/Computer login-bro.svg";
 import { NavLink, useNavigate } from "react-router-dom";
-import { GrSchedulePlay } from "react-icons/gr";
 import { FormEvent, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import Notify from "@/helpers/Notify";
 import { isValidEmail } from "@/helpers/Validators";
 import axios from "axios";
 import { CgSpinner } from "react-icons/cg";
+import { HiCubeTransparent } from "react-icons/hi";
 
 function Login() {
   const [hide, setHide] = useState("password");
@@ -79,7 +79,7 @@ function Login() {
       <div className="w-full lg:w-1/2 px-20 py-16 ">
         <div className="w-full">
           <NavLink to="/" className="flex items-center justify-start gap-2">
-            <GrSchedulePlay className="text-brightred w-6 h-6" />
+            <HiCubeTransparent className="text-brightred w-6 h-6" />
             <h1 className="text-2xl text-darkblue font-bold tracking-widest">
               FindYourGuide
             </h1>

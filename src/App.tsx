@@ -6,8 +6,10 @@ import Profile from "./pages/Profile";
 import DashboardLayout from "./layouts/DashboardLayout";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import { AuthContextProvider } from "./contexts/AuthContext";
-import CounselorProfile from "./pages/CounselorProfile";
 import AdminRegistration from "./pages/AdminRegistration";
+import CounseleeAppointment from "./pages/CounseleeAppointment";
+import CounselorAppointments from "./pages/CounselorAppointments";
+import ScheduleAppointments from "./pages/ScheduleAppointments";
 
 function App() {
   return (
@@ -19,14 +21,6 @@ function App() {
         <Route path="/adminregister" element={<AdminRegistration />} />
 
         <Route
-          path="/counselorprofile"
-          element={
-            <PrivateRoutes>
-              <CounselorProfile />
-            </PrivateRoutes>
-          }
-        />
-        <Route
           path="/dashboard"
           element={
             <PrivateRoutes>
@@ -35,6 +29,18 @@ function App() {
           }
         >
           <Route path="profile" element={<Profile />} />
+          <Route
+            path="counseleeappointments"
+            element={<CounseleeAppointment />}
+          />
+          <Route
+            path="counselorappointments"
+            element={<CounselorAppointments />}
+          />
+          <Route
+            path="scheduleappointments"
+            element={<ScheduleAppointments />}
+          />
         </Route>
       </Routes>
     </AuthContextProvider>
