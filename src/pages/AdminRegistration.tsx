@@ -9,13 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import registerImg from "../assets/Sign up-bro.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { GrSchedulePlay } from "react-icons/gr";
@@ -25,34 +19,13 @@ import { MdError } from "react-icons/md";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import axios from "axios";
 import Notify from "@/helpers/Notify";
-import { isValidIndianPhoneNumber, isValidEmail } from "@/helpers/Validators";
+import { isValidEmail } from "@/helpers/Validators";
 import { CgSpinner } from "react-icons/cg";
 
-type counselor = {
-  id: number;
-  value: string;
-  label: string;
-};
-
-const counselorTypes: counselor[] = [
-  { id: 1, value: "marriage-and-family", label: "Marriage & Family Counselor" },
-  { id: 2, value: "mental-health", label: "Mental Health Counselor" },
-  { id: 3, value: "school", label: "School Counselor" },
-  { id: 4, value: "career", label: "Career Counselor" },
-  { id: 5, value: "rehabilitation", label: "Rehabilitation Counselor" },
-  { id: 6, value: "substance-abuse", label: "Legal Counselor" },
-  { id: 9, value: "educational", label: "Educational Counselor" },
-];
-
-function Register() {
+function AdminRegistration() {
   const [hide, setHide] = useState("password");
   const [isLoading, setIsLoading] = useState(false);
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState("");
-  const [counselortype, setCounselorType] = useState("");
-  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -63,24 +36,14 @@ function Register() {
   const handleRegister = (e: FormEvent) => {
     e.preventDefault();
     const data = {
-      fname,
-      lname,
       email,
-      userType: user,
-      counselortype,
-      phone,
       password,
     };
 
     console.log(data);
 
-    if (!fname || !lname || !email || !user || !phone || !password) {
+    if (!email || !password) {
       Notify("error", "All fields are required");
-      return;
-    }
-
-    if (user === "counselor" && !counselortype) {
-      Notify("error", "Please select a counselor type");
       return;
     }
 
@@ -89,10 +52,6 @@ function Register() {
       return;
     }
 
-    if (!isValidIndianPhoneNumber(phone)) {
-      Notify("error", "Enter valid mobile number");
-      return;
-    }
     setIsLoading(true);
     axios
       .post("/api/auth/register", data)
@@ -122,26 +81,12 @@ function Register() {
         </div>
         <Card className="border-none w-full shadow-none bg-transparent">
           <CardHeader>
-            <CardTitle>Create your account</CardTitle>
-            <CardDescription>to start your journey with us</CardDescription>
+            <CardTitle>Create admin account</CardTitle>
+            <CardDescription>only authorized individual</CardDescription>
           </CardHeader>
           <CardContent>
             <form>
               <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="fname">First Name</Label>
-                  <Input
-                    id="fname"
-                    onChange={(e) => setFname(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="lname">Last Name</Label>
-                  <Input
-                    id="lname"
-                    onChange={(e) => setLname(e.target.value)}
-                  />
-                </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -150,48 +95,7 @@ function Register() {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="phone">Phone number</Label>
-                  <Input
-                    type="text"
-                    id="phone"
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="user">User type</Label>
-                  <Select onValueChange={(val) => setUser(val)}>
-                    <SelectTrigger id="user">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      <SelectItem value="counselor">Counselor</SelectItem>
-                      <SelectItem value="counselee">
-                        Counselee(Client)
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                {user == "counselor" && (
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="counselor">Counselor type</Label>
-                    <Select onValueChange={(val) => setCounselorType(val)}>
-                      <SelectTrigger id="counselor">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        {counselorTypes.map((counselor: counselor) => (
-                          <SelectItem
-                            key={counselor.id}
-                            value={counselor.value}
-                          >
-                            {counselor.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
+
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="password">Password</Label>
                   <div className="relative">
@@ -249,22 +153,6 @@ function Register() {
                 Login
               </NavLink>
             </div>
-            <div className="border-b-[0.1px] border-gray-400 w-full mt-8 relative">
-              <div className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] bg-white text-sm p-3 text-gray-500">
-                or
-              </div>
-            </div>
-            <div className="flex gap-1 mt-8">
-              <p className="text-sm text-center text-gray-500">
-                Are you a admin?
-              </p>
-              <NavLink
-                to="/adminregister"
-                className="text-brightred underline text-sm"
-              >
-                Register here
-              </NavLink>
-            </div>
           </CardFooter>
         </Card>
       </div>
@@ -275,4 +163,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default AdminRegistration;

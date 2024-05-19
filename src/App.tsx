@@ -6,6 +6,8 @@ import Profile from "./pages/Profile";
 import DashboardLayout from "./layouts/DashboardLayout";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import { AuthContextProvider } from "./contexts/AuthContext";
+import CounselorProfile from "./pages/CounselorProfile";
+import AdminRegistration from "./pages/AdminRegistration";
 
 function App() {
   return (
@@ -14,6 +16,16 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/adminregister" element={<AdminRegistration />} />
+
+        <Route
+          path="/counselorprofile"
+          element={
+            <PrivateRoutes>
+              <CounselorProfile />
+            </PrivateRoutes>
+          }
+        />
         <Route
           path="/dashboard"
           element={
