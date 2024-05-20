@@ -1,3 +1,4 @@
+import AppointmentEdit from "@/components/custom/AppointmentEdit";
 import DatePicker from "@/components/custom/DatePicker";
 import Title from "@/components/custom/Title";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,15 @@ import { useEffect, useState } from "react";
 type timeType = {
   hh: string;
   mm: string;
+};
+
+type appointmentType = {
+  _id: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  status: string;
+  reservationStatus: string;
 };
 
 const generateTimeArray = () => {
@@ -77,6 +87,7 @@ function AddAppointments() {
     mm: "",
   });
   const [reload, setReload] = useState(0);
+  const [appointments, setAppointments] = useState<appointmentType[]>([]);
 
   useEffect(() => {
     const { hourArray, minArray } = generateTimeArray();
@@ -102,6 +113,27 @@ function AddAppointments() {
       })
       .then((res) => {
         console.log(res);
+        if (res.status == 200) {
+          const data: appointmentType[] = res.data?.resData || [];
+          if (data?.length > 0) {
+            console.log(data);
+
+            const newAppointments: appointmentType[] = data.map(
+              (val: appointmentType) => ({
+                endTime: new Date(val.endTime).toLocaleTimeString(),
+                _id: val._id,
+                reservationStatus: val.reservationStatus,
+                startTime: new Date(val.startTime).toLocaleTimeString(),
+                status: val.status,
+                date: new Date(val.date).toLocaleDateString(),
+              })
+            );
+
+            setAppointments(newAppointments);
+          } else {
+            setAppointments([]);
+          }
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -218,17 +250,17 @@ function AddAppointments() {
   };
 
   return (
-    <div className="container mx-auto py-6 px-8">
+    <div className="container mx-auto py-6 px-4">
       <Title title="Add Appointments" />
-      <section>
+      <section className="mb-6">
         <Card>
           <CardHeader>
             <CardTitle>Create appointment</CardTitle>
             <CardDescription></CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col space-y-3 w-1/2 mb-8">
-              <Label className="text-brightred">
+            <div className="flex flex-col space-y-3 w-full md:w-1/2 mb-8">
+              <Label className="text-brightred ">
                 First select a date to view already existing appointments
               </Label>
               <div className="pr-2">
@@ -239,7 +271,7 @@ function AddAppointments() {
             <h5 className=" text-xl font-semibold text-gray-400 mb-6">
               Enter Slot details
             </h5>
-            <div className="flex items-center w-full  gap-24">
+            <div className="flex flex-col md:flex-row items-center w-full gap-4  md:gap-24">
               <div className="flex flex-col space-y-3 w-full">
                 <Label htmlFor="user">Start time</Label>
                 <div className="flex items-center justify-center gap-2">
@@ -353,6 +385,25 @@ function AddAppointments() {
             )}
           </CardFooter>
         </Card>
+      </section>
+      <section>
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-darkblue ">
+            All appointments on{" "}
+            <span className="text-green-400">{date?.toDateString()}</span>
+          </h2>
+          <Separator className="mt-3" />
+        </div>
+        <div className="flex flex-col gap-3">
+          {appointments.length == 0
+            ? "No appointments"
+            : appointments.map((appointment) => (
+                <AppointmentEdit
+                  appointment={appointment}
+                  key={appointment._id}
+                />
+              ))}
+        </div>
       </section>
     </div>
   );

@@ -12,7 +12,7 @@ function DashboardLayout() {
         <div
           className={`fixed ${
             open ? "-translate-x-0" : "-translate-x-96"
-          } ease-in-out lg:translate-x-0 transition-all  lg:left-0 top-0 z-50`}
+          } ease-in-out lg:translate-x-0 transition-all delay-75  lg:left-0 top-0 z-50`}
         >
           <Sidebar />
         </div>
@@ -26,7 +26,7 @@ function DashboardLayout() {
         </div>
         {open && (
           <div
-            className="h-screen w-screen absolute left-0 top-0 bg-black bg-opacity-70 "
+            className="h-screen w-screen transition-all ease-in-out delay-75 absolute left-0 top-0 bg-black bg-opacity-70 "
             onClick={() => setOpen(!open)}
           ></div>
         )}
