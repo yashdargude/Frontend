@@ -1,5 +1,6 @@
-import { HiOutlineBell, HiMenu } from "react-icons/hi";
+import { HiOutlineBell, HiMenu, HiCubeTransparent } from "react-icons/hi";
 import { Dispatch, SetStateAction } from "react";
+import { NavLink } from "react-router-dom";
 
 interface navProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -13,11 +14,20 @@ function DashboardNav({ setOpen, open }: navProps) {
   return (
     <>
       <div className="flex items-center justify-between px-6 gap-4 bg-white w-full h-16 border-b-2 border-brightred border-opacity-15">
-        <div>
+        <div className="flex items-center justify-center gap-3">
           <HiMenu
             className="w-5 h-5 text-brightred cursor-pointer"
             onClick={toggleOpen}
           />
+          <NavLink
+            to="/"
+            className="flex lg:hidden items-center justify-center gap-2 text-sm"
+          >
+            <HiCubeTransparent className="text-brightred w-6 h-6" />
+            <h1 className=" text-black font-bold tracking-widest">
+              FindYourGuide
+            </h1>
+          </NavLink>
         </div>
         <div className="flex items-center justify-center gap-4">
           <div>

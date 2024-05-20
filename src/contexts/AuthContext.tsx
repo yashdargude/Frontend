@@ -27,6 +27,7 @@ function AuthContextProvider({ children }: { children: ReactNode }) {
       }
     };
 
+    
     window.addEventListener("storage", handleStorageChange);
 
     // Cleanup function to prevent memory leaks

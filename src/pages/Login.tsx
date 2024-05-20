@@ -41,8 +41,6 @@ function Login() {
       password,
     };
 
-    console.log(data);
-
     if (!email) {
       Notify("error", "Email is required");
       return;

@@ -2,17 +2,6 @@ import DashboardNav from "@/components/custom/DashboardNav";
 import Sidebar from "@/components/custom/Sidebar";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
 
 function DashboardLayout() {
   const [open, setOpen] = useState(false);
@@ -23,7 +12,7 @@ function DashboardLayout() {
         <div
           className={`fixed ${
             open ? "-translate-x-0" : "-translate-x-96"
-          } lg:translate-x-0 transition-all  lg:left-0 top-0 z-50`}
+          } ease-in-out lg:translate-x-0 transition-all  lg:left-0 top-0 z-50`}
         >
           <Sidebar />
         </div>

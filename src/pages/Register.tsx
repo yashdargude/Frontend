@@ -72,7 +72,7 @@ function Register() {
       password,
     };
 
-    console.log(data);
+    
 
     if (!fname || !lname || !email || !user || !phone || !password) {
       Notify("error", "All fields are required");

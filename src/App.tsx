@@ -10,6 +10,8 @@ import AdminRegistration from "./pages/AdminRegistration";
 import CounseleeAppointment from "./pages/CounseleeAppointment";
 import CounselorAppointments from "./pages/CounselorAppointments";
 import ScheduleAppointments from "./pages/ScheduleAppointments";
+import { UserContextProvider } from "./contexts/UserContext";
+import AddAppointments from "./pages/AddAppointments";
 
 function App() {
   return (
@@ -24,7 +26,9 @@ function App() {
           path="/dashboard"
           element={
             <PrivateRoutes>
-              <DashboardLayout />
+              <UserContextProvider>
+                <DashboardLayout />
+              </UserContextProvider>
             </PrivateRoutes>
           }
         >
@@ -41,6 +45,7 @@ function App() {
             path="scheduleappointments"
             element={<ScheduleAppointments />}
           />
+          <Route path="addappointments" element={<AddAppointments />} />
         </Route>
       </Routes>
     </AuthContextProvider>

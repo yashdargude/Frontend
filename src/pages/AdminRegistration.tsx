@@ -40,8 +40,6 @@ function AdminRegistration() {
       password,
     };
 
-    console.log(data);
-
     if (!email || !password) {
       Notify("error", "All fields are required");
       return;
