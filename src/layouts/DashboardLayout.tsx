@@ -1,3 +1,4 @@
+import DashboardFooter from "@/components/custom/DashboardFooter";
 import DashboardNav from "@/components/custom/DashboardNav";
 import Sidebar from "@/components/custom/Sidebar";
 import { useState } from "react";
@@ -22,6 +23,9 @@ function DashboardLayout() {
           </div>
           <div className="mt-16">
             <Outlet />
+          </div>
+          <div>
+            <DashboardFooter />
           </div>
         </div>
         {open && (

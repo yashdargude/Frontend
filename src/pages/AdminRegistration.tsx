@@ -27,6 +27,7 @@ function AdminRegistration() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [privateCode, setPrivateCode] = useState("");
   const navigate = useNavigate();
 
   const handleHidePassword = () => {
@@ -38,6 +39,7 @@ function AdminRegistration() {
     const data = {
       email,
       password,
+      privateCode,
     };
 
     if (!email || !password) {
@@ -45,10 +47,14 @@ function AdminRegistration() {
       return;
     }
 
-    if (!isValidEmail(email)) {
-      Notify("error", "Enter valid email address");
+    if (!privateCode){
+      Notify("error", "Private code is required");
       return;
     }
+      if (!isValidEmail(email)) {
+        Notify("error", "Enter valid email address");
+        return;
+      }
 
     setIsLoading(true);
     axios
@@ -91,6 +97,15 @@ function AdminRegistration() {
                     type="email"
                     id="email"
                     onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="text">Private code</Label>
+                  <Input
+                    type="text"
+                    id="text"
+                    onChange={(e) => setPrivateCode(e.target.value)}
                   />
                 </div>
 

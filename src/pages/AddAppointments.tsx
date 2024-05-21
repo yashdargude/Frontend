@@ -21,11 +21,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import ConvertToDateTime from "@/helpers/ConvertToDateTime";
+import GenerateTimeArray from "@/helpers/GenerateTimeArray";
 import Notify from "@/helpers/Notify";
 import axios from "axios";
-import { log } from "console";
-import { stringify } from "querystring";
 import { useEffect, useState } from "react";
+import { LuLoader2 } from "react-icons/lu";
 
 type timeType = {
   hh: string;
@@ -41,36 +42,6 @@ type appointmentType = {
   reservationStatus: string;
 };
 
-const generateTimeArray = () => {
-  const hourArray = [];
-  const minArray = [];
-
-  for (let hour = 0; hour < 24; hour++) {
-    const formattedHour = hour.toString().padStart(2, "0");
-    hourArray.push(formattedHour);
-  }
-
-  for (let minute = 0; minute < 60; minute += 15) {
-    const formattedMinute = minute.toString().padStart(2, "0");
-    minArray.push(formattedMinute);
-  }
-
-  return { hourArray, minArray };
-};
-
-const convertToDateTime = (timeString: timeType) => {
-  const hours = timeString.hh;
-  const minutes = timeString.mm;
-  const now = new Date();
-  const date = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    parseInt(hours),
-    parseInt(minutes)
-  );
-  return date.toISOString();
-};
 
 function AddAppointments() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -88,13 +59,15 @@ function AddAppointments() {
   });
   const [reload, setReload] = useState(0);
   const [appointments, setAppointments] = useState<appointmentType[]>([]);
+  const [avLoading, setAvloading] = useState(false);
+  const [addLoading, setAddLoading] = useState(false);
 
   useEffect(() => {
-    const { hourArray, minArray } = generateTimeArray();
+    const { hourArray, minArray } = GenerateTimeArray();
     setHourArray(hourArray);
     setMinArray(minArray);
     setEndHourArray(hourArray);
-  }, [reload, setReload]);
+  }, []);
 
   useEffect(() => {
     const headers = {
@@ -138,7 +111,7 @@ function AddAppointments() {
       .catch((err) => {
         console.log(err);
       });
-  }, [setDate, date]);
+  }, [setDate, date, reload, setReload]);
 
   const handleEndHourChange = (value: string) => {
     setStartTime({
@@ -176,27 +149,31 @@ function AddAppointments() {
 
     const data = {
       date: date?.toISOString(),
-      startTime: convertToDateTime(startTime),
-      endTime: convertToDateTime(endTime),
+      startTime: ConvertToDateTime(startTime),
+      endTime: ConvertToDateTime(endTime),
     };
 
     console.log(data);
-
+    setAvloading(true);
     axios
       .post("/api/appointment/checkslotavailibility", data, { headers })
       .then((res) => {
         console.log(res);
         if (res.status == 200) {
+          setAvloading(false);
           if (res.data?.resData.available) {
             Notify("success", res.data?.resMsg);
             setIsAvailable(true);
           } else {
             Notify("error", res.data?.resMsg);
+            setIsAvailable(false);
           }
         }
       })
       .catch((err) => {
         console.log(err);
+        setAvloading(false);
+        Notify("error", err.response.data.resMsg);
       });
   };
 
@@ -228,23 +205,34 @@ function AddAppointments() {
 
     const data = {
       date: date?.toISOString(),
-      startTime: convertToDateTime(startTime),
-      endTime: convertToDateTime(endTime),
+      startTime: ConvertToDateTime(startTime),
+      endTime: ConvertToDateTime(endTime),
     };
 
     console.log(data);
-
+    setAddLoading(true);
     axios
       .post("/api/appointment/addappointment", data, { headers })
       .then((res) => {
         console.log(res);
         if (res.status == 201) {
+          setAddLoading(false);
           Notify("success", res.data.resMsg);
           setReload(reload + 1);
+          setIsAvailable(false);
+          setStartTime({
+            hh: "",
+            mm: "",
+          });
+          setEndTime({
+            hh: "",
+            mm: "",
+          });
         }
       })
       .catch((err) => {
         console.log(err);
+        setAddLoading(false);
         Notify("error", "Unable to add appointment");
       });
   };
@@ -371,18 +359,25 @@ function AddAppointments() {
             </div>
           </CardContent>
           <CardFooter>
-            {isAvailable ? (
-              <Button
-                className="bg-green-500 hover:bg-green-300"
-                onClick={handleAddAppointment}
-              >
-                Add Appointment
-              </Button>
-            ) : (
+            <div className="flex flex-col gap-2">
               <Button onClick={handleCheckAvailibility}>
+                {avLoading && (
+                  <LuLoader2 className="w-4 h-4 text-white mr-3 animate-spin" />
+                )}
                 Check Availibility
               </Button>
-            )}
+              {isAvailable && (
+                <Button
+                  className="bg-green-500 hover:bg-green-300"
+                  onClick={handleAddAppointment}
+                >
+                  {addLoading && (
+                    <LuLoader2 className="w-4 h-4 text-white mr-3 animate-spin" />
+                  )}
+                  Add Appointment
+                </Button>
+              )}
+            </div>
           </CardFooter>
         </Card>
       </section>
@@ -395,14 +390,19 @@ function AddAppointments() {
           <Separator className="mt-3" />
         </div>
         <div className="flex flex-col gap-3">
-          {appointments.length == 0
-            ? "No appointments"
-            : appointments.map((appointment) => (
-                <AppointmentEdit
-                  appointment={appointment}
-                  key={appointment._id}
-                />
-              ))}
+          {appointments.length == 0 ? (
+            <h5 className="text-center text-lg lg:text-xl font-bold text-darkblue text-opacity-30">
+              No appointments added yet
+            </h5>
+          ) : (
+            appointments.map((appointment) => (
+              <AppointmentEdit
+                appointment={appointment}
+                key={appointment._id}
+                setReload={setReload}
+              />
+            ))
+          )}
         </div>
       </section>
     </div>
