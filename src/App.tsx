@@ -12,6 +12,7 @@ import CounselorAppointments from "./pages/CounselorAppointments";
 import ScheduleAppointments from "./pages/ScheduleAppointments";
 import { UserContextProvider } from "./contexts/UserContext";
 import AddAppointments from "./pages/AddAppointments";
+import Counselor from "./pages/Counselor";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             element={<ScheduleAppointments />}
           />
           <Route path="addappointments" element={<AddAppointments />} />
+          <Route path="counselor/:id" element={<Counselor />} />
         </Route>
       </Routes>
     </AuthContextProvider>

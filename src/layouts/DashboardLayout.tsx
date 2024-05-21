@@ -17,7 +17,7 @@ function DashboardLayout() {
         >
           <Sidebar />
         </div>
-        <div className="ml-0 lg:ml-[16rem] relative w-full">
+        <div className="ml-0 lg:ml-[16rem] relative w-full h-screen">
           <div className="fixed top-0 right-0 w-full">
             <DashboardNav setOpen={setOpen} open={open} />
           </div>

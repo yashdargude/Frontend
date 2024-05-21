@@ -21,7 +21,7 @@ const counselorNavList = [
     icon: HiCalendar,
   },
   {
-    name: "Add Appointment",
+    name: "Schedule Appointment",
     path: "/dashboard/addappointments",
     icon: HiViewGridAdd,
   },
@@ -39,7 +39,7 @@ const counseleeNavList = [
     icon: HiCalendar,
   },
   {
-    name: "Schedule",
+    name: "Schedule Appointment",
     path: "/dashboard/scheduleappointments",
     icon: HiClock,
   },

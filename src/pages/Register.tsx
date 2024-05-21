@@ -35,13 +35,21 @@ type counselor = {
 };
 
 const counselorTypes: counselor[] = [
-  { id: 1, value: "marriage-and-family", label: "Marriage & Family Counselor" },
-  { id: 2, value: "mental-health", label: "Mental Health Counselor" },
-  { id: 3, value: "school", label: "School Counselor" },
-  { id: 4, value: "career", label: "Career Counselor" },
-  { id: 5, value: "rehabilitation", label: "Rehabilitation Counselor" },
-  { id: 6, value: "substance-abuse", label: "Legal Counselor" },
-  { id: 9, value: "educational", label: "Educational Counselor" },
+  {
+    id: 1,
+    value: "Marriage & Family Counselor",
+    label: "Marriage & Family Counselor",
+  },
+  { id: 2, value: "Mental Health Counselor", label: "Mental Health Counselor" },
+  { id: 3, value: "School Counselor", label: "School Counselor" },
+  { id: 4, value: "Career Counselor", label: "Career Counselor" },
+  {
+    id: 5,
+    value: "Rehabilitation Counselor",
+    label: "Rehabilitation Counselor",
+  },
+  { id: 6, value: "Legal Counselor", label: "Legal Counselor" },
+  { id: 9, value: "Educational Counselor", label: "Educational Counselor" },
 ];
 
 function Register() {
@@ -72,7 +80,7 @@ function Register() {
       password,
     };
 
-    
+    console.log(data);
 
     if (!fname || !lname || !email || !user || !phone || !password) {
       Notify("error", "All fields are required");

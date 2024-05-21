@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import ConvertToDateTime from "@/helpers/ConvertToDateTime";
 import GenerateTimeArray from "@/helpers/GenerateTimeArray";
 import Notify from "@/helpers/Notify";
@@ -42,7 +43,6 @@ type appointmentType = {
   reservationStatus: string;
 };
 
-
 function AddAppointments() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [endHourArray, setEndHourArray] = useState<string[]>([]);
@@ -61,6 +61,7 @@ function AddAppointments() {
   const [appointments, setAppointments] = useState<appointmentType[]>([]);
   const [avLoading, setAvloading] = useState(false);
   const [addLoading, setAddLoading] = useState(false);
+  const [appLoading, setAppLoading] = useState(false);
 
   useEffect(() => {
     const { hourArray, minArray } = GenerateTimeArray();
@@ -79,7 +80,7 @@ function AddAppointments() {
     };
 
     console.log(data);
-
+    setAppLoading(true);
     axios
       .post(`/api/appointment/getappointmentsbydate`, data, {
         headers,
@@ -106,10 +107,12 @@ function AddAppointments() {
           } else {
             setAppointments([]);
           }
+          setAppLoading(false);
         }
       })
       .catch((err) => {
         console.log(err);
+        setAppLoading(false);
       });
   }, [setDate, date, reload, setReload]);
 
@@ -390,8 +393,26 @@ function AddAppointments() {
           <Separator className="mt-3" />
         </div>
         <div className="flex flex-col gap-3">
-          {appointments.length == 0 ? (
-            <h5 className="text-center text-lg lg:text-xl font-bold text-darkblue text-opacity-30">
+          {appLoading ? (
+            <div className="space-y-3">
+              <div className="flex flex-col items-start space-y-2 p-4">
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-2 w-1/2" />
+                <Skeleton className="h-2 w-1/2" />
+              </div>
+              <div className="flex flex-col items-start space-y-2 p-4">
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-2 w-1/2" />
+                <Skeleton className="h-2 w-1/2" />
+              </div>
+              <div className="flex flex-col items-start space-y-2 p-4">
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-2 w-1/2" />
+                <Skeleton className="h-2 w-1/2" />
+              </div>
+            </div>
+          ) : appointments.length == 0 ? (
+            <h5 className="text-center text-lg lg:text-xl font-bold text-darkblue text-opacity-30 py-24">
               No appointments added yet
             </h5>
           ) : (
@@ -400,6 +421,7 @@ function AddAppointments() {
                 appointment={appointment}
                 key={appointment._id}
                 setReload={setReload}
+                isActionable={true}
               />
             ))
           )}

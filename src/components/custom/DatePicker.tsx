@@ -9,8 +9,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import axios from "axios";
+import { Dispatch, SetStateAction } from "react";
+
 
 interface datePickerProps {
   date: Date | undefined;

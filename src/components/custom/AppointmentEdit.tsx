@@ -38,6 +38,7 @@ interface appointmentType {
 interface AppointmentEditProps {
   appointment: appointmentType;
   setReload: Dispatch<SetStateAction<number>>;
+  isActionable: boolean;
 }
 
 type timeType = {
@@ -45,7 +46,11 @@ type timeType = {
   mm: string;
 };
 
-function AppointmentEdit({ appointment, setReload }: AppointmentEditProps) {
+function AppointmentEdit({
+  appointment,
+  setReload,
+  isActionable,
+}: AppointmentEditProps) {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
   const [endHourArray, setEndHourArray] = useState<string[]>([]);
@@ -60,8 +65,6 @@ function AppointmentEdit({ appointment, setReload }: AppointmentEditProps) {
     mm: "",
   });
 
-  const [isAvailable, setIsAvailable] = useState(false);
-  const [avLoading, setAvloading] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const { hourArray, minArray } = GenerateTimeArray();
@@ -141,7 +144,6 @@ function AppointmentEdit({ appointment, setReload }: AppointmentEditProps) {
           setEditLoading(false);
           Notify("success", res.data.resMsg);
           setReload((prev) => prev + 1);
-          setIsAvailable(false);
           setOpen(false);
         }
       })
@@ -200,145 +202,152 @@ function AppointmentEdit({ appointment, setReload }: AppointmentEditProps) {
               </h5>
             </div>
           </div>
-          <div className="flex flex-row lg:flex-col items-center justify-between md:justify-normal gap-2">
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button size="sm" className="w-32 md:w-24">
-                  Edit
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Edit slot</DialogTitle>
-                  <DialogDescription>
-                    Make changes to slot time here. Click save when you're done.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="flex items-center justify-center py-2 rounded-full text-sm bg-amber-400 opacity-60 font-semibold text-opacity-40">
-                    <LuClock className="w-4 h-4 text-darkblue mr-2" />
-                    {appointment.startTime} - {appointment.endTime}
-                  </div>
-                  <div className="flex flex-col space-y-3 w-full">
-                    <Label htmlFor="user">Start time</Label>
-                    <div className="flex items-center justify-center gap-2">
-                      <Select onValueChange={(val) => handleEndHourChange(val)}>
-                        <SelectTrigger id="user">
-                          <SelectValue placeholder="Hour" />
-                        </SelectTrigger>
-                        <SelectContent position="popper">
-                          <SelectGroup>
-                            <SelectLabel>Hours</SelectLabel>
-                            {hourArray.map((hour) => {
-                              return (
-                                <SelectItem key={hour} value={hour}>
-                                  {hour}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <Select
-                        onValueChange={(val) =>
-                          setStartTime((prev) => ({ ...prev, mm: val }))
-                        }
-                      >
-                        <SelectTrigger id="user">
-                          <SelectValue placeholder="Minutes" />
-                        </SelectTrigger>
-                        <SelectContent position="popper">
-                          <SelectGroup>
-                            <SelectLabel>Minutes</SelectLabel>
-                            {minArray.map((min) => {
-                              return (
-                                <SelectItem key={min} value={min}>
-                                  {min}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="flex flex-col space-y-3 w-full">
-                    <Label htmlFor="user">End time</Label>
-                    <div className="flex items-center justify-center gap-2">
-                      <Select
-                        onValueChange={(val) =>
-                          setEndTime((prev) => ({ ...prev, hh: val }))
-                        }
-                      >
-                        <SelectTrigger id="user">
-                          <SelectValue placeholder="Hour" />
-                        </SelectTrigger>
-                        <SelectContent position="popper">
-                          <SelectGroup>
-                            <SelectLabel>Hours</SelectLabel>
-                            {endHourArray.map((hour) => {
-                              return (
-                                <SelectItem key={hour} value={hour}>
-                                  {hour}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <Select
-                        onValueChange={(val) =>
-                          setEndTime((prev) => ({ ...prev, mm: val }))
-                        }
-                      >
-                        <SelectTrigger id="user">
-                          <SelectValue placeholder="Minutes" />
-                        </SelectTrigger>
-                        <SelectContent position="popper">
-                          <SelectGroup>
-                            <SelectLabel>Minutes</SelectLabel>
-                            {minArray.map((min) => {
-                              return (
-                                <SelectItem key={min} value={min}>
-                                  {min}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-                <DialogFooter>
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      className="bg-green-500 hover:bg-green-300"
-                      onClick={handleEditAppointment}
-                    >
-                      {editLoading && (
-                        <LuLoader2 className="w-4 h-4 text-white mr-3 animate-spin" />
-                      )}
-                      Edit Appointment
+          {isActionable &&
+            appointment.status == "upcoming" &&
+            appointment.reservationStatus == "free" && (
+              <div className="flex flex-row lg:flex-col items-center justify-between md:justify-normal gap-2">
+                <Dialog open={open} onOpenChange={setOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="sm" className="w-32 md:w-24">
+                      Edit
                     </Button>
-                  </div>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Edit slot</DialogTitle>
+                      <DialogDescription>
+                        Make changes to slot time here. Click save when you're
+                        done.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="flex items-center justify-center py-2 rounded-full text-sm bg-amber-400 opacity-60 font-semibold text-opacity-40">
+                        <LuClock className="w-4 h-4 text-darkblue mr-2" />
+                        {appointment.startTime} - {appointment.endTime}
+                      </div>
+                      <div className="flex flex-col space-y-3 w-full">
+                        <Label htmlFor="user">Start time</Label>
+                        <div className="flex items-center justify-center gap-2">
+                          <Select
+                            onValueChange={(val) => handleEndHourChange(val)}
+                          >
+                            <SelectTrigger id="user">
+                              <SelectValue placeholder="Hour" />
+                            </SelectTrigger>
+                            <SelectContent position="popper">
+                              <SelectGroup>
+                                <SelectLabel>Hours</SelectLabel>
+                                {hourArray.map((hour) => {
+                                  return (
+                                    <SelectItem key={hour} value={hour}>
+                                      {hour}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                          <Select
+                            onValueChange={(val) =>
+                              setStartTime((prev) => ({ ...prev, mm: val }))
+                            }
+                          >
+                            <SelectTrigger id="user">
+                              <SelectValue placeholder="Minutes" />
+                            </SelectTrigger>
+                            <SelectContent position="popper">
+                              <SelectGroup>
+                                <SelectLabel>Minutes</SelectLabel>
+                                {minArray.map((min) => {
+                                  return (
+                                    <SelectItem key={min} value={min}>
+                                      {min}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="flex flex-col space-y-3 w-full">
+                        <Label htmlFor="user">End time</Label>
+                        <div className="flex items-center justify-center gap-2">
+                          <Select
+                            onValueChange={(val) =>
+                              setEndTime((prev) => ({ ...prev, hh: val }))
+                            }
+                          >
+                            <SelectTrigger id="user">
+                              <SelectValue placeholder="Hour" />
+                            </SelectTrigger>
+                            <SelectContent position="popper">
+                              <SelectGroup>
+                                <SelectLabel>Hours</SelectLabel>
+                                {endHourArray.map((hour) => {
+                                  return (
+                                    <SelectItem key={hour} value={hour}>
+                                      {hour}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                          <Select
+                            onValueChange={(val) =>
+                              setEndTime((prev) => ({ ...prev, mm: val }))
+                            }
+                          >
+                            <SelectTrigger id="user">
+                              <SelectValue placeholder="Minutes" />
+                            </SelectTrigger>
+                            <SelectContent position="popper">
+                              <SelectGroup>
+                                <SelectLabel>Minutes</SelectLabel>
+                                {minArray.map((min) => {
+                                  return (
+                                    <SelectItem key={min} value={min}>
+                                      {min}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <div className="flex flex-col gap-2">
+                        <Button
+                          className="bg-green-500 hover:bg-green-300"
+                          onClick={handleEditAppointment}
+                        >
+                          {editLoading && (
+                            <LuLoader2 className="w-4 h-4 text-white mr-3 animate-spin" />
+                          )}
+                          Edit Appointment
+                        </Button>
+                      </div>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
 
-            <Button
-              disabled={deleteLoading}
-              size="sm"
-              variant="destructive"
-              className="w-32 md:w-24"
-              onClick={handleDelete}
-            >
-              {deleteLoading && (
-                <LuLoader2 className="w-4 h-4 animate-spin mr-3" />
-              )}
-              Delete
-            </Button>
-          </div>
+                <Button
+                  disabled={deleteLoading}
+                  size="sm"
+                  variant="destructive"
+                  className="w-32 md:w-24"
+                  onClick={handleDelete}
+                >
+                  {deleteLoading && (
+                    <LuLoader2 className="w-4 h-4 animate-spin mr-3" />
+                  )}
+                  Delete
+                </Button>
+              </div>
+            )}
         </div>
       </CardContent>
     </Card>

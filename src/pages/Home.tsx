@@ -2,17 +2,17 @@ import Header from "@/components/custom/Header";
 
 function Home() {
   return (
-    <>
+    <div className="relative">
       <Header />
       <section className="mt-24 pt-4 pb-24 bg-gradient-radial from-gradientred via-gradientblue to-darkblue">
-        <div className="container mx-md-auto w-full flex flex-col items-center justify-center py-12">
+        <div className="container mx-auto w-full flex flex-col items-center justify-center px-4 py-12">
           <div>
-            <h1 className="text-6xl text-white text-opacity-70 text-center px-60 tracking-tight font-bold leading-tight">
+            <h1 className="text-6xl text-white text-opacity-70 text-center tracking-tight font-semibold leading-tight">
               Find the perfect guide to your well-being
             </h1>
 
             <div className="flex flex-col lg:flex-row gap-4 items-center justify-center mt-16">
-              <div className="text-white font-semibold bg-white bg-opacity-20 px-6 py-4 rounded-full">
+              <div className="text-white font-semibold bg-white bg-opacity-20 lg:px-6 py-4 px-4  rounded-full">
                 🗓️ Seamless Booking
               </div>
               <div className="text-white font-semibold bg-white bg-opacity-20 px-6 py-4 rounded-full">
@@ -23,7 +23,7 @@ function Home() {
               </div>
             </div>
 
-            <p className="text-blurwhite text-opacity-50 text-2xl text-center font-semibold tracking-normal leading-10 px-32 mt-10">
+            <p className="text-blurwhite text-opacity-50 textsm lg:text-xl text-center font-semibold tracking-normal leading-10 px-32 mt-10 text-wrap">
               Feeling overwhelmed or lost? FindYourGuide connects you with
               qualified counselors who specialize in a variety of areas.
               Schedule appointments with ease and embark on a personalized path
@@ -33,7 +33,7 @@ function Home() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 
