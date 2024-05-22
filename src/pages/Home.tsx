@@ -10,7 +10,7 @@ function Home() {
         <div className="container mx-auto w-full flex flex-col items-center justify-center px-4 py-12">
           <div className="w-full">
             <h1 className="text-4xl md:text-5xl lg:text-6xl text-white  text-center tracking-tight font-semibold leading-tight mx-4 md:mx-56 lg:mx-80">
-              Find the perfect guide to your well being
+              FindYourGuide: Your One-Stop Shop for Counseling Appointments
             </h1>
 
             <div className="flex flex-col lg:flex-row gap-4 items-center justify-center mt-24">
