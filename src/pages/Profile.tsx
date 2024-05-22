@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import useUserContext from "@/hooks/useUserContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type counselorType = {
   firstname: string;
@@ -52,6 +53,7 @@ const counselorTypes = [
 
 function Profile() {
   const { userType, userId } = useUserContext();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [counselor, setCounselor] = useState<counselorType>({
     firstname: "",
@@ -83,6 +85,7 @@ function Profile() {
 
     if (userType == "counselor") {
       //get counselor details
+      setIsLoading(true);
       axios
         .get(`/api/appointment/counselorbyid/${userId}`, { headers })
         .then((res) => {
@@ -111,12 +114,15 @@ function Profile() {
               description: data.description,
             });
           }
+          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          setIsLoading(false);
         });
     } else {
       //get client details
+      setIsLoading(true);
       axios
         .get("/api/profile/userdetails", { headers })
         .then((res) => {
@@ -136,9 +142,11 @@ function Profile() {
               phone: data.phone,
             });
           }
+          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          setIsLoading(false);
         });
     }
   }, [userId, userType]);
@@ -148,154 +156,169 @@ function Profile() {
       <section className="container mx-auto py-6 px-8">
         <Title title="Profile" />
         <div>
-          {userType == "counselee" && (
-            <div className="grid w-full items-center gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="fname">Firstname</Label>
-                  <Input
-                    id="fname"
-                    disabled={isDisabled}
-                    defaultValue={counselee.firstname}
-                    onChange={(e) =>
-                      setCounselee((prev) => ({
-                        ...prev,
-                        firstname: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="lname">Lastname</Label>
-                  <Input
-                    id="lname"
-                    disabled={isDisabled}
-                    defaultValue={counselee.lastname}
-                    onChange={(e) =>
-                      setCounselee((prev) => ({
-                        ...prev,
-                        lastname: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  disabled={true}
-                  defaultValue={counselee.email}
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="phone">Phone number</Label>
-                <Input
-                  id="phone"
-                  disabled={isDisabled}
-                  defaultValue={counselee.phone}
-                  onChange={(e) =>
-                    setCounselee((prev) => ({
-                      ...prev,
-                      phone: e.target.value,
-                    }))
-                  }
-                />
+          {isLoading ? (
+            <div className="flex flex-col space-y-3">
+              <Skeleton className="h-[125px] w-full rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-1/2" />
               </div>
             </div>
-          )}
-          {userType == "counselor" && (
-            <div className="grid w-full items-center gap-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="fname">Firstname</Label>
-                  <Input
-                    id="fname"
-                    disabled={isDisabled}
-                    defaultValue={counselor.firstname}
-                    onChange={(e) =>
-                      setCounselor((prev) => ({
-                        ...prev,
-                        firstname: e.target.value,
-                      }))
-                    }
-                  />
+          ) : (
+            <>
+              {userType == "counselee" && (
+                <div className="grid w-full items-center gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="fname">Firstname</Label>
+                      <Input
+                        id="fname"
+                        disabled={isDisabled}
+                        defaultValue={counselee.firstname}
+                        onChange={(e) =>
+                          setCounselee((prev) => ({
+                            ...prev,
+                            firstname: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="lname">Lastname</Label>
+                      <Input
+                        id="lname"
+                        disabled={isDisabled}
+                        defaultValue={counselee.lastname}
+                        onChange={(e) =>
+                          setCounselee((prev) => ({
+                            ...prev,
+                            lastname: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      disabled={true}
+                      defaultValue={counselee.email}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="phone">Phone number</Label>
+                    <Input
+                      id="phone"
+                      disabled={isDisabled}
+                      defaultValue={counselee.phone}
+                      onChange={(e) =>
+                        setCounselee((prev) => ({
+                          ...prev,
+                          phone: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
                 </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="lname">Lastname</Label>
-                  <Input
-                    id="lname"
-                    disabled={isDisabled}
-                    defaultValue={counselor.lastname}
-                    onChange={(e) =>
-                      setCounselor((prev) => ({
-                        ...prev,
-                        lastname: e.target.value,
-                      }))
-                    }
-                  />
+              )}
+              {userType == "counselor" && (
+                <div className="grid w-full items-center gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="fname">Firstname</Label>
+                      <Input
+                        id="fname"
+                        disabled={isDisabled}
+                        defaultValue={counselor.firstname}
+                        onChange={(e) =>
+                          setCounselor((prev) => ({
+                            ...prev,
+                            firstname: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="lname">Lastname</Label>
+                      <Input
+                        id="lname"
+                        disabled={isDisabled}
+                        defaultValue={counselor.lastname}
+                        onChange={(e) =>
+                          setCounselor((prev) => ({
+                            ...prev,
+                            lastname: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      disabled={true}
+                      defaultValue={counselor.email}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="phone">Phone number</Label>
+                    <Input
+                      id="phone"
+                      disabled={isDisabled}
+                      defaultValue={counselor.phone}
+                      onChange={(e) =>
+                        setCounselor((prev) => ({
+                          ...prev,
+                          phone: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="counselor">Counselor type</Label>
+                    <Select
+                      disabled={isDisabled}
+                      onValueChange={(val) =>
+                        setCounselor((prev) => ({
+                          ...prev,
+                          counselorType: val,
+                        }))
+                      }
+                    >
+                      <SelectTrigger id="counselor">
+                        <SelectValue placeholder={counselor.counselorType} />
+                      </SelectTrigger>
+                      <SelectContent position="popper">
+                        {counselorTypes.map((counselor) => (
+                          <SelectItem
+                            key={counselor.id}
+                            value={counselor.value}
+                          >
+                            {counselor.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="phone"
+                      disabled={isDisabled}
+                      defaultValue={counselor.description}
+                      onChange={(e) =>
+                        setCounselor((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  disabled={true}
-                  defaultValue={counselor.email}
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="phone">Phone number</Label>
-                <Input
-                  id="phone"
-                  disabled={isDisabled}
-                  defaultValue={counselor.phone}
-                  onChange={(e) =>
-                    setCounselor((prev) => ({
-                      ...prev,
-                      phone: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="counselor">Counselor type</Label>
-                <Select
-                  disabled={isDisabled}
-                  onValueChange={(val) =>
-                    setCounselor((prev) => ({
-                      ...prev,
-                      counselorType: val,
-                    }))
-                  }
-                >
-                  <SelectTrigger id="counselor">
-                    <SelectValue placeholder={counselor.counselorType} />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    {counselorTypes.map((counselor) => (
-                      <SelectItem key={counselor.id} value={counselor.value}>
-                        {counselor.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="phone"
-                  disabled={isDisabled}
-                  defaultValue={counselor.description}
-                  onChange={(e) =>
-                    setCounselor((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-            </div>
+              )}
+            </>
           )}
           {/* <div className="mt-8">
             <Button onClick={() => setIsDisabled(!isDisabled)}>
