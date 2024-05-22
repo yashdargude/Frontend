@@ -30,7 +30,7 @@ function UserContextProvider({ children }: { children: ReactNode }) {
       .get("/api/profile/userdetails", { headers })
       .then((res) => {
         if (res.status == 200) {
-          setUserId(res.data.resData.userId);
+          setUserId(res.data.resData._id);
           setFirstname(res.data.resData.firstname);
           setLastname(res.data.resData.lastname);
           setUserType(res.data.resData.userType);
