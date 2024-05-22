@@ -28,6 +28,7 @@ FindYourGuide is a web or mobile application that simplifies appointment schedul
 - React
 - Tailwind
 - Shadcn
+- Typescript
 
 
 ## Run Locally
