@@ -23,6 +23,12 @@ FindYourGuide is a web or mobile application that simplifies appointment schedul
 - View counselors' schedules and available slots in real-time
 - Reserve appointments for specific times
 
+# Tech Stack
+
+- React
+- Tailwind
+- Shadcn
+
 
 ## Run Locally
 
