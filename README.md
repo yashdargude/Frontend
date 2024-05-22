@@ -23,3 +23,47 @@ FindYourGuide is a web or mobile application that simplifies appointment schedul
 - View counselors' schedules and available slots in real-time
 - Reserve appointments for specific times
 
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/FindYourGuide/Frontend.git
+```
+
+Go to the project directory
+
+```bash
+  cd Frontend
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
+```
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`VITE_BACKEND_URL`
+
+#### To run locally, the value of this variable will be
+
+```javascript
+VITE_BACKEND_URL=http://localhost:8080
+```
+#### To run after deployment, the value of this variable will be
+
+```javascript
+VITE_BACKEND_URL=Hosted link
+```
+
