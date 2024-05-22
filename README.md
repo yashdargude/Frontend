@@ -17,4 +17,9 @@ FindYourGuide is a web or mobile application that simplifies appointment schedul
 - Register with FindYourGuide to showcase their expertise
 - Set daily or weekly appointment slots based on their availability
 - Manage their calendar and bookings in one place
-- Cross platform
+
+## Clients:
+
+- View counselors' schedules and available slots in real-time
+- Reserve appointments for specific times
+
