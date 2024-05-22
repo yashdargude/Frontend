@@ -10,3 +10,11 @@ FindYourGuide is a web or mobile application that simplifies appointment schedul
 
 - Counselors of all specializations (e.g., career, life coaching, relationship, legal)
 - Clients seeking counseling services in various areas
+
+# Key Features
+## Counselors:
+
+- Register with FindYourGuide to showcase their expertise
+- Set daily or weekly appointment slots based on their availability
+- Manage their calendar and bookings in one place
+- Cross platform
