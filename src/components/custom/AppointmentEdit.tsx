@@ -203,8 +203,8 @@ function AppointmentEdit({
             </div>
           </div>
           {isActionable &&
-            appointment.status == "upcoming" &&
-            appointment.reservationStatus == "free" && (
+            (appointment.status == "upcoming" ||
+              appointment.reservationStatus == "free") && (
               <div className="flex flex-row lg:flex-col items-center justify-between md:justify-normal gap-2">
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>

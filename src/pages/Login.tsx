@@ -74,8 +74,8 @@ function Login() {
 
   return (
     <section className="flex flex-col lg:flex-row w-full h-screen ">
-      <div className="w-full lg:w-1/2 px-20 py-16 ">
-        <div className="w-full">
+      <div className="w-full lg:w-1/2 px-4 md:px-20 py-16 ">
+        <div className="w-full ml-2">
           <NavLink to="/" className="flex items-center justify-start gap-2">
             <HiCubeTransparent className="text-brightred w-6 h-6" />
             <h1 className="text-2xl text-darkblue font-bold tracking-widest">
